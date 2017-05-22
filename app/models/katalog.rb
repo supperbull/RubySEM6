@@ -1,0 +1,2 @@
+class Katalog < ApplicationRecord
+end

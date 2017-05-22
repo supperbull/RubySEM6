@@ -1,0 +1,47 @@
+<%- model_class = Katalog -%>
+
+  <%= search_form_for @q do |f| %>
+    <div class="field">
+      <%= f.text_field :nazwa_cont, placeholder: 'Nazwa antywirusa' %>
+      <%= f.submit "Szukaj", class: 'btn btn-primary btn-xs' %>
+    </div>
+    <% end %>
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Lp.</th>
+      <th><%= model_class.human_attribute_name(:nazwa) %></th>
+      <th><%= model_class.human_attribute_name(:opis) %></th>
+      <th><%= model_class.human_attribute_name(:url) %></th>
+      <th>Data utworzenia</th>
+      <th>Akcje</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @websites.each_with_index do |katalog,i| %>
+      <tr>
+        <td><%= (i+1) %></td>
+          <td><%= katalog.nazwa %></td>
+          <td><%= markdown(katalog.opis) %></td>
+          <td><a href="<%= katalog.url %>" target="_blank"><%= katalog.url %></a></td>
+        <td><%=l katalog.created_at, format: :long%></td>
+        <td>
+          <%= link_to katalog_path(katalog), class: 'btn btn-xs', title: "#{ t('.show', default: t('helpers.links.show')) }" do %>
+            <%= glyph 'info-sign' %>
+          <%- end -%>
+          <%= link_to edit_katalog_path(katalog), class: 'btn btn-xs', title: "#{ t('.edit', default: t('helpers.links.edit')) }" do %>
+            <%= glyph 'pencil' %>
+          <%- end -%>
+          <%= link_to katalog_path(katalog), method: :delete, data: { confirm: t('.confirm', default: 'Czy na pewno chcesz usunąć ten rekord?') }, class: 'btn btn-xs', title: "#{ t('.destroy', default: t('helpers.links.destroy')) }" do %>
+            <%= glyph 'remove' %>
+          <%- end -%>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= link_to t('.new', default: 'Dodaj rekord'),
+            new_katalog_path,
+            class: 'btn btn-primary' %>
